@@ -10,4 +10,4 @@
 # Project exclude paths
 /backend/node_modules/
 /frontend/node_modules/
-/mysql/mysql_data
+/mysql_data
