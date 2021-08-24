@@ -6,19 +6,28 @@ import axios from 'axios';
 function App() {
 
     useEffect(() => {
-        axios.get('/api/hi')
-            .then(response => {
-                console.log('response', response);
-            });
+        try {
+
+            axios.get('/api/hi')
+                .then(response => {
+                    console.log('response', response);
+                });
+        } catch (e) {
+            console.log(e);
+        }
     }, []);
 
     useEffect(() => {
-        //여기서 데이터베이스에 있는 값을 가져온다.
-        axios.get('/api/values')
-            .then(response => {
-            console.log("response", response);
-            setLists(response.data);
-        });
+        try {
+            //여기서 데이터베이스에 있는 값을 가져온다.
+            axios.get('/api/values')
+                .then(response => {
+                    console.log("response", response);
+                    setLists(response.data);
+                });
+        } catch (e) {
+            console.log(e);
+        }
     });
 
     const [lists, setLists] = useState([]);
@@ -30,17 +39,20 @@ function App() {
 
     const submitHandler = (event) => {
         event.preventDefault();
-
-        axios.post('/api/value', { value: value })
-            .then(response => {
-                if (response.data.success) {
-                    console.log('response', response)
-                    setLists([...lists, response.data])
-                    setValue("");
-                } else {
-                    alert('값을 DB에 넣는데 실패했습니다.')
-                }
-            });
+        try {
+            axios.post('/api/value', {value: value})
+                .then(response => {
+                    if (response.data.success) {
+                        console.log('response', response)
+                        setLists([...lists, response.data])
+                        setValue("");
+                    } else {
+                        alert('값을 DB에 넣는데 실패했습니다.')
+                    }
+                });
+        } catch (e) {
+            console.log(e);
+        }
     }
 
 
