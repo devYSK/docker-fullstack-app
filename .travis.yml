@@ -1,0 +1,32 @@
+language: generic
+
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - docker build -t kim206gh/react-test-app -f ./frontend/Dockerfile.dev ./frontend
+
+script:
+  - docker run -e CI=true kim206gh/react-test-app npm test
+
+after_success:
+  - docker build -t kim206gh/docker-frontend ./frontend
+  - docker built -t kim206gh/docker-backend ./backend
+  - docker built -t kim206gh/docker-nginx ./nginx
+
+  - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_ID" --password-stdin
+
+  - docker push kim206gh/docker-frontend
+  - docker push kim206gh/docker-backend
+  - docker push kim206gh/docker-nginx
+
+
+#  deploy:
+#    provider: elasticbeanstalk
+#    region: us-east-2
+#    app: docker-fullstack-app
+#    env: DockerFullstackApp-env
+#    buc
+
